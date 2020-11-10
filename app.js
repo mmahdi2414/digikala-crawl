@@ -4,19 +4,27 @@ const requestPromise = require('request-promise');
 const parse = require('./parse');
 const save = require('./csvWriter');
 let productArray = JSON.parse(String(fs.readFileSync('arr.json')));
+const tor_axios = require('tor-axios');
+const tor = tor_axios.torSetup({
+    ip: 'localhost',
+    port: 9050,
+    controlPort: '9051',
+    controlPassword: 'giraffe',
+})
 // console.log(productArray);
 async function parsePage(pageNo , idx){
     try {
-        let html = await requestPromise(`https://www.digikala.com/search/category-beverages/?pageno=${pageNo + 1}&sortby=1`)
+        let html = await tor.get(`https://www.digikala.com/search/category-beverages/?pageno=${pageNo + 1}&sortby=1`);
+        html = html.data;
         let products = $('.c-product-box__title .js-product-url', html);
         if (products.length===0){
             throw Error('no connected')
         }
-        for(let i=idx; i<products.length; i++){
+        for(let i=idx; i<1; i++){
             let urlProduct = products[i].attribs.href;
             let encodeUrl = encodeURI(urlProduct);
             //console.debug(encodeUrl);
-            let parsedProductPage = await parse(encodeUrl);
+            let parsedProductPage = await parse(encodeUrl , tor);
             //console.debug(parsedProductPage);
             if (parsedProductPage !== null){
                 parsedProductPage['page_url'] = 'https://www.digikala.com' + encodeUrl;
@@ -59,8 +67,7 @@ let start = async () =>{
             i--;
             idx = ok;
             console.log('again');
-            // await save(productArray);
-            await sleep(5000);
+            await tor.torNewSession();
             console.log('finish sleep');
         }
     }

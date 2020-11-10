@@ -2,9 +2,9 @@ const requestPromise = require('request-promise');
 const $ = require('cheerio');
 const baseUrl = 'https://www.digikala.com';
 
-async function parseProductPage(uri) {
+async function parseProductPage(uri , tor) {
     try {
-        let html = await requestPromise(baseUrl+uri);
+        let html = await tor.get(baseUrl+uri);
         let brand = $('.product-brand-title', html);
         let category = $('li+ li .btn-link-spoiler', html);
         let name = $('.c-product__title', html);
