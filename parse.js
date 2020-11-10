@@ -5,6 +5,7 @@ const baseUrl = 'https://www.digikala.com';
 async function parseProductPage(uri , tor) {
     try {
         let html = await tor.get(baseUrl+uri);
+        html = html.data;
         let brand = $('.product-brand-title', html);
         let category = $('li+ li .btn-link-spoiler', html);
         let name = $('.c-product__title', html);

@@ -20,7 +20,7 @@ async function parsePage(pageNo , idx){
         if (products.length===0){
             throw Error('no connected')
         }
-        for(let i=idx; i<1; i++){
+        for(let i=idx; i<products.length; i++){
             let urlProduct = products[i].attribs.href;
             let encodeUrl = encodeURI(urlProduct);
             //console.debug(encodeUrl);
