@@ -50,14 +50,17 @@ let start = async () =>{
     for (let i = start ; i < number_of_page; i++){
         let ok = await parsePage(i , idx);
         idx = 0;
-        if (ok === -1)
-           console.debug(`page ${i} is finished`);
+        if (ok === -1){
+            console.debug(`page ${i} is finished`);
+            await save(productArray);
+
+        }
         else{
             i--;
             idx = ok;
             console.log('again');
             // await save(productArray);
-            // await sleep(10000);
+            await sleep(5000);
             console.log('finish sleep');
         }
     }
