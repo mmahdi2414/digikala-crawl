@@ -29,7 +29,9 @@ async function parsePage(pageNo , idx){
             if (parsedProductPage !== null){
                 parsedProductPage['page_url'] = 'https://www.digikala.com' + encodeUrl;
                 productArray.push(parsedProductPage)
-            }else{
+      		await save(productArray);
+		console.log(`page ${pageNo} index ${i} done...`);
+	    }else{
                console.debug(`error in ${encodeUrl} 
                 id = ${i}`);
                 return i;
@@ -52,16 +54,15 @@ function sleep(ms) {
 }  
 let start = async () =>{
     const number_of_page = 260;
-    const start = 0;
-    let idx = 0;
+    const start = 143;
+    let idx = 41;
 
     for (let i = start ; i < number_of_page; i++){
         let ok = await parsePage(i , idx);
         idx = 0;
         if (ok === -1){
             console.debug(`page ${i} is finished`);
-            await save(productArray);
-
+//            await save(productArray);
         }
         else{
             i--;
