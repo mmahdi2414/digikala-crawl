@@ -1,13 +1,13 @@
 const converter = require('json-2-csv');
 const fs = require('fs');
-module.exports = (todos) => {
+module.exports = async (todos) => {
     // console.log('productArr = ' , todos);
-    fs.writeFileSync('arr.json',JSON.stringify(todos));
-    converter.json2csv(todos, (err, csv) => {
+    await fs.writeFileSync('arr.json',JSON.stringify(todos));
+    converter.json2csv(todos,async (err, csv) => {
         if (err) {
             throw err;
         }
-        csv = csv.replace('undefined','');
-        fs.writeFileSync('out.csv',csv);
+        //csv = csv.replace('undefined','');
+        await fs.writeFileSync('out.csv',csv);
     });
 }
