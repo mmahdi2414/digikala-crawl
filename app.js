@@ -1,3 +1,4 @@
+
 const $ = require('cheerio');
 const fs = require('fs');
 const requestPromise = require('request-promise');
@@ -53,6 +54,9 @@ function sleep(ms) {
     });
 }  
 let start = async () =>{
+    productArray = JSON.parse(String(await fs.readFileSync('arr.json')));
+    await save(productArray);
+    return;
     const number_of_page = 260;
     const start = 143;
     let idx = 41;
