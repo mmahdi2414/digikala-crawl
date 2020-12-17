@@ -28,8 +28,9 @@ async function parseProductPage(uri , tor) {
                 key = extractValueFromText(value , cnt);
                 if (value != key.value){
                     value = key.value;
-                    cnt++;
                 }
+                else
+                    cnt++;
                 key = key.key;
             }
             ans[normalizeText(key)] = normalizeText(value);
@@ -46,6 +47,8 @@ async function parseProductPage(uri , tor) {
 function extractValueFromText(text , cnt) {
     if (text.split(':').length === 1 || text.split(':')[1] === '') {
         if (text.split('=').length === 1 || text.split('=')[1] === '') {
+            if (text.includes('اسیدهای چرب ترانس'))
+                return {key: 'اسیدهای چرب ترانس', value: text.replace('اسیدهای چرب ترانس ', '')};
             return {key:`توضیحات${cnt}` , value:text}
         }
         return {key:text.split('=')[0], value:text.split('=')[1]}
@@ -54,8 +57,13 @@ function extractValueFromText(text , cnt) {
 }
 
 function normalizeText(txt) {
+    if (!txt)
+        return '';
     if (txt[0] == '-')
         txt = txt.substr(1);
+    if (txt[txt.length - 1] == ':')
+        txt = txt.substr(0 , txt.length - 1);
+        
     txt = txt.replace( /[\r\n]+/gm, "" );
     txt = txt.replace( /\s\s+/g, ' ' );
     return txt.trim();
