@@ -25,9 +25,11 @@ async function parseProductPage(uri , tor) {
                 continue;
             let value = normalizeText(a.children[1].children[0].children[0].data)
             if (key === 'سایر توضیحات' || !key) {
-                cnt++;
                 key = extractValueFromText(value , cnt);
-                value = key.value;
+                if (value != key.value){
+                    value = key.value;
+                    cnt++;
+                }
                 key = key.key;
             }
             ans[normalizeText(key)] = normalizeText(value);
@@ -52,6 +54,8 @@ function extractValueFromText(text , cnt) {
 }
 
 function normalizeText(txt) {
+    if (txt[0] == '-')
+        txt = txt.substr(1);
     txt = txt.replace( /[\r\n]+/gm, "" );
     txt = txt.replace( /\s\s+/g, ' ' );
     return txt.trim();
