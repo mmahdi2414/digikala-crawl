@@ -43,7 +43,10 @@ async function parseProductPage(uri , tor) {
 
 function extractValueFromText(text , cnt) {
     if (text.split(':').length === 1 || text.split(':')[1] === '') {
-        return {key:`توضیحات${cnt}` , value:text.split(':')[0]}
+        if (text.split('=').length === 1 || text.split('=')[1] === '') {
+            return {key:`توضیحات${cnt}` , value:text}
+        }
+        return {key:text.split('=')[0], value:text.split('=')[1]}
     }
     return {key:text.split(':')[0], value:text.split(':')[1]}
 }
