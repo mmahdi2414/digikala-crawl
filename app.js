@@ -13,9 +13,9 @@ const tor = tor_axios.torSetup({
     controlPassword: 'giraffe',
 })
 // console.log(productArray);
-async function parsePage(pageNo , idx){
+async function parsePage(pageNo , idx, category){
     try {
-        let html = await tor.get(`https://www.digikala.com/search/category-beverages/?pageno=${pageNo + 1}&sortby=1`);
+        let html = await tor.get(`https://www.digikala.com/search/${category}/?pageno=${pageNo + 1}&sortby=1`);
         html = html.data;
         let products = $('.c-product-box__title .js-product-url', html);
         if (products.length===0){
@@ -51,16 +51,18 @@ function sleep(ms) {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
     });
-}  
+}
+
 let start = async () =>{
     productArray = JSON.parse(String(await fs.readFileSync('arr.json')));
     await save(productArray);
-    const number_of_page = 260;
+    const category = 'category-biscuits-wafers';
+    const number_of_page = 36;
     const start = 0;
     let idx = 0;
 
     for (let i = start ; i < number_of_page; i++){
-        let ok = await parsePage(i , idx);
+        let ok = await parsePage(i, idx, category);
         idx = 0;
         if (ok === -1){
             console.debug(`page ${i} is finished`);
