@@ -6,12 +6,13 @@ const parse = require('./parse');
 const save = require('./csvWriter');
 let productArray = []
 const tor_axios = require('tor-axios');
-const tor = tor_axios.torSetup({
-    ip: 'localhost',
-    port: 9050,
-    controlPort: '9051',
-    controlPassword: 'giraffe',
-})
+// const tor = tor_axios.torSetup({
+//     ip: 'localhost',
+//     port: 9050,
+//     controlPort: '9051',
+//     controlPassword: 'my_password',
+// })
+const tor = require('axios');
 // console.log(productArray);
 async function parsePage(pageNo , idx, category){
     try {
@@ -56,11 +57,12 @@ function sleep(ms) {
 let start = async () =>{
     productArray = JSON.parse(String(await fs.readFileSync('arr.json')));
     await save(productArray);
-    const category = 'category-biscuits-wafers';
-    const number_of_page = 36;
+    const category = 'category-chips';
+    const number_of_page = 11;
     const start = 0;
     let idx = 0;
 
+    console.log(`start with page ${start + 1} and index ${idx + 1}`);
     for (let i = start ; i < number_of_page; i++){
         let ok = await parsePage(i, idx, category);
         idx = 0;
@@ -71,7 +73,7 @@ let start = async () =>{
             i--;
             idx = ok;
             console.log('again');
-            await tor.torNewSession();
+            await sleep(2000);
             console.log('finish sleep');
         }
     }

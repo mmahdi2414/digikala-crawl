@@ -10,9 +10,9 @@ async function parseProductPage(uri , tor) {
         let category = $('li+ li .btn-link-spoiler', html);
         let name = $('.c-product__title', html);
         let image_url = $('.js-gallery-img', html)[0].attribs['data-src'];
-        category = normalizeText(category[0].children[0].data);
-        brand = normalizeText(brand[0].children[0].data);
-        name = normalizeText(name[0].children[0].data);
+        category = normalizeText((category['0'] || {children: [{data: null}]}).children[0].data);
+        brand = normalizeText((brand['0'] || {children: [{data: null}]}).children[0].data);
+        name = normalizeText(name['0'].children[0].data);
         let details = $('.c-params__list', html);
         let cnt = 0;
         let ans = {
